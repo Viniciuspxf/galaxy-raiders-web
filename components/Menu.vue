@@ -28,6 +28,8 @@ h1 {
   color: white;
   font-size: 4vw;
   text-transform: uppercase;
+
+  z-index: 30;
 }
 
 nav {
