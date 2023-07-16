@@ -22,8 +22,6 @@ menu {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  z-index: 10;
 }
 
 h1 {
@@ -31,7 +29,6 @@ h1 {
   font-size: 4vw;
   text-transform: uppercase;
 }
-
 
 nav {
   height: 50vh;
@@ -53,5 +50,7 @@ nav button {
   font-size: 1.4vw;
 
   text-transform: uppercase;
+
+  z-index: 30;
 }
 </style>
