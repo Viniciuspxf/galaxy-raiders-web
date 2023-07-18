@@ -18,34 +18,53 @@
 </template>
 
 
-<script setup>
-const {
-  data: spaceField,
-  refresh: updateSpaceField
-} = await $get("/space-field");
+<script>
+export default {
+  async setup() {
+    const { data: spaceField, refresh: updateSpaceField} = await $get("/space-field");
+    return { spaceField, updateSpaceField };
+  },
+  data() {
+    return {
+      isPaused: false
+    }   
+  },
+  emits: ['pauseGame'],
+  methods: {
+    async sendPauseCommand() {
+      console.log("call command")
+      await $post("/ship/commands", { command: "PAUSE_GAME" });
+      this.isPaused = !this.isPaused;
+    }
+  },
+  mounted() {
+    window.addEventListener("keydown", async (event) => {
+      const keyToCommand = {
+        "ArrowUp": "MOVE_SHIP_UP",
+        "ArrowDown": "MOVE_SHIP_DOWN",
+        "ArrowRight": "MOVE_SHIP_RIGHT",
+        "ArrowLeft": "MOVE_SHIP_LEFT",
+        "Space": "LAUNCH_MISSILE",
+        "Escape": "PAUSE_GAME",
+      };
+    
+      const command = keyToCommand[event.code];
+    
+      // Ignore if invalid key was pressed
+      if (command === undefined) return;
 
-onMounted(() => {
-  window.addEventListener("keydown", async (event) => {
-    const keyToCommand = {
-      "ArrowUp": "MOVE_SHIP_UP",
-      "ArrowDown": "MOVE_SHIP_DOWN",
-      "ArrowRight": "MOVE_SHIP_RIGHT",
-      "ArrowLeft": "MOVE_SHIP_LEFT",
-      "Space": "LAUNCH_MISSILE",
-      "Escape": "PAUSE_GAME",
-    };
+      if (!this.isPaused && command != "PAUSE_GAME") {
+        console.log(`Triggering command: ${command}`);
+        await $post("/ship/commands", { command });
+      }
 
-    const command = keyToCommand[event.code];
-
-    // Ignore if invalid key was pressed
-    if (command === undefined) return;
-
-    console.log(`Triggering command: ${command}`);
-    await $post("/ship/commands", { command })
-  });
-
-  window.setInterval(updateSpaceField, 1);
-})
+      if (command === "PAUSE_GAME") {
+        this.$emit('pauseGame');
+      }
+    });
+    window.setInterval(this.updateSpaceField, 1);
+  }
+}
 </script>
 
 <style>

@@ -1,11 +1,44 @@
 <template>
   <div id="canvas">
-    <Game v-if="true" />
-    <Menu v-if="true" />
+    <Game v-if="onGame" ref="gameRef" @pause-game="pauseGame"/>
+    <Menu v-if="onMenu" @start-game="startGame" @continue-game="pauseGame" @exit-game="exitGame" @show-leaderboard="showLeaderboard" :onGame="onGame"/>
+    <Leaderboard v-if="onLeaderboard"/>
   </div>
 </template>
 
-<script setup>
+<script>
+export default {
+  data() {
+    return {
+      onGame: false,
+      onMenu: true,
+      onLeaderboard: false
+    };
+  },
+  methods: {
+    startGame() {
+      this.onGame = true;
+      this.onMenu = false;
+    },
+    pauseGame() {
+      if (!this.onLeaderboard) {
+        this.onMenu = !this.onMenu;
+        this.$refs.gameRef.sendPauseCommand();
+      }
+      else {
+        this.onLeaderboard = false;
+        this.onMenu = true;
+      }
+    },
+    showLeaderboard() {
+      this.onMenu = false;
+      this.onLeaderboard = true;
+    },
+    exitGame() {
+      window.close();
+    }
+  }
+}
 </script>
 
 <style>
