@@ -21,6 +21,7 @@
 <script>
 export default {
   async setup() {
+    await $post("/ship/commands", { command: "START_GAME" });
     const { data: spaceField, refresh: updateSpaceField} = await $get("/space-field");
     return { spaceField, updateSpaceField };
   },
@@ -35,10 +36,8 @@ export default {
       console.log("call command")
       await $post("/ship/commands", { command: "PAUSE_GAME" });
       this.isPaused = !this.isPaused;
-    }
-  },
-  mounted() {
-    window.addEventListener("keydown", async (event) => {
+    },
+    async getKey(event) {
       const keyToCommand = {
         "ArrowUp": "MOVE_SHIP_UP",
         "ArrowDown": "MOVE_SHIP_DOWN",
@@ -61,8 +60,16 @@ export default {
       if (command === "PAUSE_GAME") {
         this.$emit('pauseGame');
       }
-    });
+      
+    }
+  },
+  mounted() {
+    window.addEventListener("keydown", this.getKey);
     window.setInterval(this.updateSpaceField, 1);
+  },
+  async unmounted() {
+    await $post("/ship/commands", { command: "EXIT_GAME" });
+    window.removeEventListener("keydown", this.getKey);
   }
 }
 </script>

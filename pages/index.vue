@@ -35,7 +35,7 @@ export default {
       this.onLeaderboard = true;
     },
     exitGame() {
-      window.close();
+      this.onGame = false;
     }
   }
 }

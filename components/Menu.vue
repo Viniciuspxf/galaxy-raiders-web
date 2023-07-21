@@ -5,7 +5,7 @@
         <button v-if="!onGame" @click="$emit('startGame')">Start Game</button>
         <button v-if="onGame" @click="$emit('continueGame')">Continue Game</button>
         <button @click="$emit('showLeaderboard')">Leader Board</button>
-        <button @click="$emit('exitGame')">Exit</button>
+        <button v-if="onGame" @click="$emit('exitGame')">Exit</button>
       </nav>
     </menu>
 </template>
