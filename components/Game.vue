@@ -22,7 +22,7 @@
 export default {
   async setup() {
     await $post("/ship/commands", { command: "START_GAME" });
-    const { data: spaceField, refresh: updateSpaceField} = await $get("/space-field");
+    const { data: spaceField, refresh: updateSpaceField } = await $get("/space-field");
     return { spaceField, updateSpaceField };
   },
   data() {
