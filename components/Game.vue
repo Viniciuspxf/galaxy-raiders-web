@@ -27,7 +27,8 @@ export default {
   },
   data() {
     return {
-      isPaused: false
+      isPaused: false,
+      interval: 0
     }   
   },
   emits: ['pauseGame'],
@@ -65,11 +66,12 @@ export default {
   },
   mounted() {
     window.addEventListener("keydown", this.getKey);
-    window.setInterval(this.updateSpaceField, 1);
+    this.interval = window.setInterval(this.updateSpaceField, 1);
   },
   async unmounted() {
     await $post("/ship/commands", { command: "EXIT_GAME" });
     window.removeEventListener("keydown", this.getKey);
+    clearInterval(this.interval);
   }
 }
 </script>
