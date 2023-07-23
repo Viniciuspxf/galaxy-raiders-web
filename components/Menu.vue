@@ -20,10 +20,7 @@ export default {
       window.open("/leaderboard", "_blank");
     }
   },
-  emits: ['startGame', 'continueGame', 'exitGame'],
-  mounted() {
-    console.log("onGame:", this.onGame);
-  }
+  emits: ['startGame', 'continueGame', 'exitGame']
 }
 
 </script>
