@@ -1,8 +1,7 @@
 <template>
   <div id="canvas">
     <Game v-if="onGame" ref="gameRef" @pause-game="pauseGame"/>
-    <Menu v-if="onMenu" @start-game="startGame" @continue-game="pauseGame" @exit-game="exitGame" @show-leaderboard="showLeaderboard" :onGame="onGame"/>
-    <Leaderboard v-if="onLeaderboard"/>
+    <Menu v-if="onMenu" @start-game="startGame" @continue-game="pauseGame" @exit-game="exitGame" :onGame="onGame"/>
   </div>
 </template>
 
@@ -11,8 +10,7 @@ export default {
   data() {
     return {
       onGame: false,
-      onMenu: true,
-      onLeaderboard: false
+      onMenu: true
     };
   },
   methods: {
@@ -21,18 +19,8 @@ export default {
       this.onMenu = false;
     },
     pauseGame() {
-      if (!this.onLeaderboard) {
-        this.onMenu = !this.onMenu;
-        this.$refs.gameRef.sendPauseCommand();
-      }
-      else {
-        this.onLeaderboard = false;
-        this.onMenu = true;
-      }
-    },
-    showLeaderboard() {
-      this.onMenu = false;
-      this.onLeaderboard = true;
+      this.onMenu = !this.onMenu;
+      this.$refs.gameRef.sendPauseCommand();
     },
     exitGame() {
       this.onGame = false;

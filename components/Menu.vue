@@ -4,7 +4,7 @@
       <nav>
         <button v-if="!onGame" @click="$emit('startGame')">Start Game</button>
         <button v-if="onGame" @click="$emit('continueGame')">Continue Game</button>
-        <button @click="$emit('showLeaderboard')">Leader Board</button>
+        <button @click="openLeaderboard">Leaderboard</button>
         <button v-if="onGame" @click="$emit('exitGame')">Exit</button>
       </nav>
     </menu>
@@ -15,7 +15,12 @@ export default {
   props: {
     onGame: Boolean
   },
-  emits: ['startGame', 'continueGame' , 'showLeaderboard', 'exitGame'],
+  methods: {
+    openLeaderboard() {
+      window.open("/leaderboard", "_blank");
+    }
+  },
+  emits: ['startGame', 'continueGame', 'exitGame'],
   mounted() {
     console.log("onGame:", this.onGame);
   }
